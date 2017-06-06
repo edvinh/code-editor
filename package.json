@@ -1,0 +1,20 @@
+{
+  "name": "crash-and-compile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js --ignore tmp/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Edvin Havic",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "nodemon": "^1.11.0"
+  }
+}

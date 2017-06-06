@@ -1,0 +1,4 @@
+scripts/
+tmp/
+node_modules/
+.vscode/
