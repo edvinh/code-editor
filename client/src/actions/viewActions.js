@@ -42,3 +42,30 @@ export function fontSize (size) {
     })
   }
 }
+
+export function toggleAutocomplete (checked) {
+  return (dispatch) => {
+    dispatch({
+      type: types.TOGGLE_AUTOCOMPLETE,
+      payload: checked,
+    })
+  }
+}
+
+export function toggleLiveAutocomplete (checked) {
+  return (dispatch) => {
+    dispatch({
+      type: types.TOGGLE_LIVE_AUTOCOMPLETE,
+      payload: checked,
+    })
+  }
+}
+
+export function toggleVim (checked) {
+  return (dispatch) => {
+    dispatch({
+      type: types.TOGGLE_VIM,
+      payload: checked,
+    })
+  }
+}

@@ -35,18 +35,24 @@ export default (props) => {
         labelPosition="left"
         iconStyle={{ marginLeft: 0 }}
         style={checkBoxStyle}
+        checked={props.autocomplete}
+        onCheck={(evt, isChecked) => props.onCheck('autocomplete', isChecked)}
       />
       <Checkbox
         label="Live autocomplete"
         labelPosition="left"
         style={checkBoxStyle}
         iconStyle={{ marginLeft: 0 }}
+        checked={props.liveAutocomplete}
+        onCheck={(evt, isChecked) => props.onCheck('liveAutocomplete', isChecked)}
       />
       <Checkbox
         label="VIM Bindings"
         labelPosition="left"
         iconStyle={{ marginLeft: 0 }}
         style={checkBoxStyle}
+        checked={props.vim}        
+        onCheck={(evt, isChecked) => props.onCheck('vim', isChecked)}        
       />
       <TextField
         hintText="14"

@@ -2,6 +2,8 @@ const exec = require('child_process').exec
 const fs = require('fs')
 const build = require('./buildscripts')
 
+/* Proof of concept, not the prettiest code */
+
 const execCmd = (buildString) => {
   return new Promise ((resolve, reject) => {
     let timestamp = Date.now()

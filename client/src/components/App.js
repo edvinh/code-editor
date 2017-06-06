@@ -16,6 +16,7 @@ class App extends Component {
     this.onChange = this.onChange.bind(this)
     this.onPressRun = this.onPressRun.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
+    this.onCheck = this.onCheck.bind(this)
 
     this.state = {
       drawerOpen: false,
@@ -34,6 +35,18 @@ class App extends Component {
     this.props.compile(this.props.code[this.props.lang], this.props.lang)
   }
 
+  onCheck (which, checked) {
+    console.log(which, checked)
+    switch (which) {
+      case 'autocomplete':
+        return this.props.toggleAutocomplete(checked)
+      case 'liveAutocomplete':
+        return this.props.toggleLiveAutocomplete(checked)
+      case 'vim':
+        return this.props.toggleVim(checked)
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -43,9 +56,20 @@ class App extends Component {
           toggle={this.toggleDrawer}
           lang={this.props.lang}
           setLang={this.props.changeLang}
+          onCheck={this.onCheck}
+          autocomplete={this.props.autocomplete}
+          liveAutocomplete={this.props.liveAutocomplete}
+          vim={this.props.vim}
         />
         <div className="leftDiv">
-          <Editor onChange={this.onChange} code={this.props.code[this.props.lang]} lang={this.props.lang} />
+          <Editor
+            onChange={this.onChange}
+            code={this.props.code[this.props.lang]}
+            lang={this.props.lang}
+            autocomplete={this.props.autocomplete}
+            liveAutocomplete={this.props.liveAutocomplete}
+            vim={this.props.vim}
+          />
         </div>
         <div className="rightDiv">
           <OutputArea output={this.props.output} />
@@ -63,6 +87,9 @@ function mapStateToProps (state) {
     fontSize: state.view.fontSize,
     compiling: state.view.compiling,
     output: state.view.output,
+    autocomplete: state.view.autocomplete,
+    liveAutocomplete: state.view.liveAutocomplete,
+    vim: state.view.vim,
   }
 }
 

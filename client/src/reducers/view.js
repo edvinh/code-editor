@@ -12,6 +12,9 @@ const initialState = {
   compiling: false,
   fontSize: 16,
   lang: 'java',
+  liveAutocomplete: true,
+  autocomplete: false,
+  vim: false,
 }
 export default function codeReducer (state = initialState, action) {
   switch (action.type) {
@@ -39,6 +42,21 @@ export default function codeReducer (state = initialState, action) {
         ...state,
         compiling: false,
         output: action.payload,
+      }
+    case types.UPDATE_FONT_SIZE:
+      return {
+        ...state,
+        fontSize: action.payload,
+      }
+    case types.TOGGLE_AUTOCOMPLETE:
+      return {
+        ...state,
+        autocomplete: action.payload,
+      }
+    case types.TOGGLE_LIVE_AUTOCOMPLETE:
+      return {
+        ...state,
+        liveAutocomplete: action.payload,
       }
     default:
       return state
