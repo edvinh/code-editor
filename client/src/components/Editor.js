@@ -4,6 +4,8 @@ import AceEditor from 'react-ace'
 
 import 'brace/ext/language_tools'
 import 'brace/theme/monokai'
+import 'brace/keybinding/vim'
+
 import 'brace/mode/java'
 import 'brace/mode/javascript'
 import 'brace/mode/python'
@@ -22,6 +24,7 @@ export default (props) => {
       value={props.code}
       enableBasicAutocompletion={props.autocomplete}
       enableLiveAutocompletion={props.liveAutocomplete}
+      keyboardHandler={props.vim ? 'vim' : ''}
       tabSize={2}
     />
   )

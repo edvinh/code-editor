@@ -6,6 +6,7 @@ import Divider from 'material-ui/Divider'
 import Check from 'material-ui/svg-icons/navigation/check'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
 
 const checkBoxStyle = {
   paddingTop: 20,
@@ -51,8 +52,8 @@ export default (props) => {
         labelPosition="left"
         iconStyle={{ marginLeft: 0 }}
         style={checkBoxStyle}
-        checked={props.vim}        
-        onCheck={(evt, isChecked) => props.onCheck('vim', isChecked)}        
+        checked={props.vim}
+        onCheck={(evt, isChecked) => props.onCheck('vim', isChecked)}
       />
       <TextField
         hintText="14"
@@ -63,6 +64,12 @@ export default (props) => {
         hintText="2"
         floatingLabelText="Indentation"
         style={{ marginLeft: 20, width: 330 }}
+      />
+      <FlatButton
+        style={{ position: 'absolute', bottom: 20, left: 20, width: 'calc(100% - 40px)' }}
+        secondary
+        onTouchTap={props.clearLocalStorage}
+        label="Clear Local Storage"
       />
     </Drawer>
   )

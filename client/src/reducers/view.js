@@ -22,7 +22,7 @@ export default function codeReducer (state = initialState, action) {
     // Set `compiling` to false when loading a persisted state
     // since we don't care about it
     case REHYDRATE:
-      return {      
+      return {
         ...state,
         ...action.payload.view,
         compiling: false,
@@ -66,6 +66,11 @@ export default function codeReducer (state = initialState, action) {
       return {
         ...state,
         liveAutocomplete: action.payload,
+      }
+    case types.TOGGLE_VIM: 
+      return {
+        ...state,
+        vim: action.payload,
       }
     default:
       return state

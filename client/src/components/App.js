@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 import './App.css'
 
 import TopBar from './TopBar'
@@ -36,7 +37,6 @@ class App extends Component {
   }
 
   onCheck (which, checked) {
-    console.log(which, checked)
     switch (which) {
       case 'autocomplete':
         return this.props.toggleAutocomplete(checked)
@@ -62,6 +62,7 @@ class App extends Component {
           autocomplete={this.props.autocomplete}
           liveAutocomplete={this.props.liveAutocomplete}
           vim={this.props.vim}
+          clearLocalStorage={() => { /* todo */}}
         />
         <div className="leftDiv">
           <Editor
