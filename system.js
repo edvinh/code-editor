@@ -1,4 +1,5 @@
 const exec = require('child_process').exec
+const path = require('path')
 const fs = require('fs')
 const build = require('./buildscripts')
 
@@ -38,8 +39,8 @@ const compileJava = (code) => {
 
       const buildString = build.java('Main')
       execCmd(buildString).then(out => {
-        fs.unlink('tmp/Main.java', () => {})
-        fs.unlink('tmp/Main.class', () => {})
+        fs.unlinkSync('tmp/Main.java')
+        fs.unlinkSync('tmp/Main.class')
         resolve(out)
       })      
     })
@@ -48,14 +49,12 @@ const compileJava = (code) => {
 
 const compileJs = (code) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile('tmp/main.js', code, (writeErr) => {
-      if (writeErr) {
-        reject({ success: false, message: 'Failed to write file' })
-      }
+    fs.writeFile(path.join(__dirname, 'tmp/main.js'), code, err => {
+      if (err) reject(err)
 
       const buildString = build.js('main')
       execCmd(buildString).then(out => {
-        fs.unlink('tmp/main.js', () => {})
+        fs.unlinkSync('./tmp/main.js')
         resolve(out)
       })
     })
@@ -84,34 +83,46 @@ const compileHaskell = (code) => {
 
       const buildString = build.haskell('main')
       execCmd(buildString).then(out => {
-        fs.unlink('tmp/main.exe', () => {})        
-        fs.unlink('tmp/main.o', () => {})
-        fs.unlink('tmp/main.hi', () => {})
-        fs.unlink('tmp/main.hs', () => {})
+        fs.unlinkSync('tmp/main.exe')        
+        fs.unlinkSync('tmp/main.o')
+        fs.unlinkSync('tmp/main.hi')
+        fs.unlinkSync('tmp/main.hs')
         resolve(out)
       })
     })
   })
 }
 
-const compile = (code, lang) => {
-  switch (lang) {
-    case 'java':
-      return compileJava(code)
-    case 'javascript':
-      return compileJs(code)
-    case 'python':
-      return compilePython(code)
-    case 'haskell':
-      return compileHaskell(code)
-  }
+const compileGo = code =>
+  new Promise((resolve, reject) =>
+    fs.writeFile('tmp/main.go', code, err => {
+      if (err) reject(err)
+      execCmd(build.go('main')).then(out => {
+        fs.unlinkSync('tmp/main.go')
+        fs.unlinkSync('tmp/main') // build with -o flag to set output name so we dont have to check for .exe
+        resolve(out)
+      })
+    })
+  )
+
+const buildMethods = {
+  python: compilePython,
+  java: compileJava,
+  javascript: compileJs,
+  haskell: compileHaskell,
+  go: compileGo
 }
 
-const cmd = (command) => {
-  return new Promise((resolve, reject) => {
-    execCmd(command).then(out => resolve(out))
-  })
+const compile = (code, lang) => {
+  if (!buildMethods[lang]) {
+    return new Promise((res, rej) => {
+      rej('Language unavailable')
+    });
+  }
+  return buildMethods[lang](code)
 }
+
+const cmd = (command) => execCmd(command).then(out => resolve(out))
 
 module.exports = {
   compile,

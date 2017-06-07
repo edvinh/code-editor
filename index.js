@@ -10,7 +10,7 @@ app.post('/api/compile/:lang', (req, res) => {
   const code = req.body
   system.compile(code, req.params.lang).then(out => {
     res.json(out)
-  })
+  }).catch(err => console.error(err))
 })
 
 app.post('/api/command', (req, res) => {
@@ -23,7 +23,7 @@ app.post('/api/command', (req, res) => {
   }
   system.cmd(cmd).then(out => {
     res.json(out)
-  })
+  }).catch(err => console.error(err))
 })
 
 app.listen(3001)

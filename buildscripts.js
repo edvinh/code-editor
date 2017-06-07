@@ -1,5 +1,5 @@
 const path = require('path')
-const filepath = name => path.join(__dirname, `tmp/${filename}`)
+const filepath = name => path.join(__dirname, `tmp/${name}`)
 
 const java = (filename) => {
   return `javac ${filepath(filename)}.java & java -cp tmp ${filename}`
