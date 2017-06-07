@@ -6,13 +6,19 @@ export function compile (code, lang) {
     dispatch({
       type: types.COMPILE,
     })
-
-    const res = await API.compile(code, lang)
-    const json = await res.json()
-    dispatch({
-      type: types.COMPILE_SUCCESS,
-      payload: json,
-    })
+    try {
+      const res = await API.compile(code, lang)
+      const json = await res.json()
+      dispatch({
+        type: types.COMPILE_SUCCESS,
+        payload: json,
+      })
+    } catch (err) {
+      dispatch({
+        type: types.COMPILE_FAIL,
+        payload: err,
+      })
+    }
   }
 }
 
@@ -66,6 +72,15 @@ export function toggleVim (checked) {
     dispatch({
       type: types.TOGGLE_VIM,
       payload: checked,
+    })
+  }
+}
+
+export function showInfo (info) {
+  return (dispatch) => {
+    dispatch({
+      type: types.SHOW_INFO,
+      payload: info,
     })
   }
 }

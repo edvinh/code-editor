@@ -44,6 +44,8 @@ class App extends Component {
         return this.props.toggleLiveAutocomplete(checked)
       case 'vim':
         return this.props.toggleVim(checked)
+      default: 
+        return null
     }
   }
 

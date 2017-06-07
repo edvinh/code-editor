@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist/constants'
 import * as types from '../constants'
 import * as utils from '../utils'
 
@@ -18,6 +19,14 @@ const initialState = {
 }
 export default function codeReducer (state = initialState, action) {
   switch (action.type) {
+    // Set `compiling` to false when loading a persisted state
+    // since we don't care about it
+    case REHYDRATE:
+      return {      
+        ...state,
+        ...action.payload.view,
+        compiling: false,
+      }
     case types.CHANGE_LANG:
       return {
         ...state,

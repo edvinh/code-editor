@@ -1,8 +1,14 @@
 import React from 'react'
+import brace from 'brace'
 import AceEditor from 'react-ace'
 
+import 'brace/ext/language_tools'
 import 'brace/theme/monokai'
 import 'brace/mode/java'
+import 'brace/mode/javascript'
+import 'brace/mode/python'
+import 'brace/mode/haskell'
+import 'brace/mode/golang'
 
 export default (props) => {
   return (
@@ -14,12 +20,9 @@ export default (props) => {
       fontSize={16}
       editorProps={{ $blockScrolling: true }}
       value={props.code}
-      setOptions={{
-        enableBasicAutocompletion: props.autocomplete,
-        enableLiveAutocompletion: props.liveAutocomplete,
-        showLineNumbers: true,
-        tabSize: 2,
-      }}
+      enableBasicAutocompletion={props.autocomplete}
+      enableLiveAutocompletion={props.liveAutocomplete}
+      tabSize={2}
     />
   )
 }
