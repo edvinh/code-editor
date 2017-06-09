@@ -1,9 +1,7 @@
 const exec = require('child_process').exec
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const build = require('./buildscripts')
-
-/* Proof of concept, not the prettiest code */
 
 const execCmd = (buildString) => {
   return new Promise ((resolve, reject) => {
@@ -30,6 +28,37 @@ const execCmd = (buildString) => {
   })
 }
 
+const dockerize = (type, dir) => {
+  const folderPath = path.join(__dirname, dir)
+  const run = (args) =>
+    execCmd(`docker run -i --rm -v ${folderPath}:/app -w /app ` + args)
+
+  switch (type) {
+    case 'node':
+      return run('node:8 node main.js')
+    case 'golang':
+      return run('golang:1.8 go run main.go')
+    case 'python':
+      return run('python:3.6 python main.py')
+  }
+}
+
+const mktemp = (cb) => {
+  return new Promise((resolve, reject) => {
+    fs.mkdtemp(`tmp/`, (err, folder) => {
+      if (err) reject(err)
+      resolve(folder)
+    })
+  }).then(folder => {
+    const cleanup = () => fs.remove(folder)
+    return new Promise((resolve, reject) => {
+      cb(folder)
+        .then(out => resolve(out))
+        .then(cleanup, cleanup)
+    })
+  })
+}
+
 const compileJava = (code) => {
   return new Promise((resolve, reject) => {
     fs.writeFile('tmp/Main.java', code, (writeErr) => {
@@ -47,32 +76,42 @@ const compileJava = (code) => {
   })
 }
 
-const compileJs = (code) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(path.join(__dirname, 'tmp/main.js'), code, err => {
-      if (err) reject(err)
-
-      const buildString = build.js('main')
-      execCmd(buildString).then(out => {
-        fs.unlinkSync('./tmp/main.js')
-        resolve(out)
+const compileJs = (code) =>
+  mktemp(folder => {
+    const fp = path.join(folder, 'main.js')
+    return new Promise((resolve, reject) =>
+      fs.writeFile(fp, code, err => {
+        if (err) reject(err)
+        const proc = dockerize('node', folder, 'main.js')
+        resolve(proc)
       })
-    })
+    )
   })
-}
 
-const compilePython = (code) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile('tmp/main.py', code, (writeErr) => {
-      if (writeErr) {
-        reject({ success: false, message: 'Failed to write file' })
-      }
-
-      const buildString = build.python('main')
-      execCmd(buildString).then(out => resolve(out))
-    })
+const compileGo = (code) =>
+  mktemp(folder => {
+    const fp = path.join(folder, 'main.go')
+    return new Promise((resolve, reject) =>
+      fs.writeFile(fp, code, err => {
+        if (err) reject(err)
+        const proc = dockerize('golang', folder, 'main.go')
+        resolve(proc)
+      })
+    )
   })
-}
+
+
+const compilePython = (code) =>
+  mktemp(folder => {
+    const fp = path.join(folder, 'main.py')
+    return new Promise((resolve, reject) =>
+      fs.writeFile(fp, code, err => {
+        if (err) reject(err)
+        const proc = dockerize('python', folder, 'main.py')
+        resolve(proc)
+      })
+    )
+  })
 
 const compileHaskell = (code) => {
   return new Promise((resolve, reject) => {
@@ -92,18 +131,6 @@ const compileHaskell = (code) => {
     })
   })
 }
-
-const compileGo = code =>
-  new Promise((resolve, reject) =>
-    fs.writeFile('tmp/main.go', code, err => {
-      if (err) reject(err)
-      execCmd(build.go('main')).then(out => {
-        fs.unlinkSync('tmp/main.go')
-        fs.unlinkSync('tmp/main') // build with -o flag to set output name so we dont have to check for .exe
-        resolve(out)
-      })
-    })
-  )
 
 const buildMethods = {
   python: compilePython,
