@@ -1,7 +1,6 @@
 const exec = require('child_process').exec
 const path = require('path')
 const fs = require('fs-extra')
-const build = require('./buildscripts')
 
 const execCmd = (buildString) => {
   return new Promise ((resolve, reject) => {
@@ -40,6 +39,10 @@ const dockerize = (type, dir) => {
       return run('golang:1.8 go run main.go')
     case 'python':
       return run('python:3.6 python main.py')
+    case 'java':
+      return run('java:9 /bin/bash -c "javac Main.java && java Main"')
+    case 'c':
+      return run('gcc:4.9 /bin/bash -c "gcc -o main main.c && ./main"')
   }
 }
 
@@ -59,94 +62,32 @@ const mktemp = (cb) => {
   })
 }
 
-const compileJava = (code) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile('tmp/Main.java', code, (writeErr) => {
-      if (writeErr) {
-        reject({ success: false, message: 'Failed to write file' })
-      }
-
-      const buildString = build.java('Main')
-      execCmd(buildString).then(out => {
-        fs.unlinkSync('tmp/Main.java')
-        fs.unlinkSync('tmp/Main.class')
-        resolve(out)
-      })      
-    })
-  })
-}
-
-const compileJs = (code) =>
-  mktemp(folder => {
-    const fp = path.join(folder, 'main.js')
-    return new Promise((resolve, reject) =>
-      fs.writeFile(fp, code, err => {
-        if (err) reject(err)
-        const proc = dockerize('node', folder, 'main.js')
-        resolve(proc)
-      })
-    )
-  })
-
-const compileGo = (code) =>
-  mktemp(folder => {
-    const fp = path.join(folder, 'main.go')
-    return new Promise((resolve, reject) =>
-      fs.writeFile(fp, code, err => {
-        if (err) reject(err)
-        const proc = dockerize('golang', folder, 'main.go')
-        resolve(proc)
-      })
-    )
-  })
-
-
-const compilePython = (code) =>
-  mktemp(folder => {
-    const fp = path.join(folder, 'main.py')
-    return new Promise((resolve, reject) =>
-      fs.writeFile(fp, code, err => {
-        if (err) reject(err)
-        const proc = dockerize('python', folder, 'main.py')
-        resolve(proc)
-      })
-    )
-  })
-
-const compileHaskell = (code) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile('tmp/main.hs', code, (writeErr) => {
-      if (writeErr) {
-        reject({ success: false, message: 'Failed to write file' })
-      }
-
-      const buildString = build.haskell('main')
-      execCmd(buildString).then(out => {
-        fs.unlinkSync('tmp/main.exe')        
-        fs.unlinkSync('tmp/main.o')
-        fs.unlinkSync('tmp/main.hi')
-        fs.unlinkSync('tmp/main.hs')
-        resolve(out)
-      })
-    })
-  })
-}
-
-const buildMethods = {
-  python: compilePython,
-  java: compileJava,
-  javascript: compileJs,
-  haskell: compileHaskell,
-  go: compileGo
+const filenames = {
+  python: 'main.py',
+  java: 'Main.java',
+  node: 'main.js',
+  haskell: 'main.hs',
+  c: 'main.c',
+  golang: 'main.go'
 }
 
 const compile = (code, lang) => {
-  if (!buildMethods[lang]) {
+  if (!filenames[lang]) {
     return new Promise((res, rej) => {
       rej('Language unavailable')
     });
   }
-  return buildMethods[lang](code)
+
+  return mktemp(folder => {
+    const fp = path.join(folder, filenames[lang])
+    return new Promise((resolve, reject) =>
+      fs.writeFile(fp, code, err => {
+        if (err) reject(err)
+        const proc = dockerize(lang, folder)
+        resolve(proc)
+      })
+    )
+  })
 }
 
 const cmd = (command) => execCmd(command).then(out => resolve(out))
