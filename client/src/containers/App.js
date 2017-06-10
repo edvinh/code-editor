@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 
-import './App.css'
+import '../styles/App.css'
 
-import TopBar from './TopBar'
-import Drawer from './Drawer'
-import OutputArea from './OutputArea'
-import Editor from './Editor'
+import TopBar from '../components/TopBar'
+import Drawer from '../components/Drawer'
+import OutputArea from '../components/OutputArea'
+import Editor from '../components/Editor'
 
 import * as viewActions from '../actions/viewActions'
 import { connect } from 'react-redux'
