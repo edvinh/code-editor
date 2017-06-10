@@ -1,6 +1,7 @@
 scripts/
 node_modules/
 .vscode/
+tmp/**
 
 *.log
 npm-debug.log*
