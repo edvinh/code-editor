@@ -52,7 +52,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <TopBar leftIconClick={this.toggleDrawer} onPressRun={this.onPressRun} loading={this.props.compiling} />
+        <TopBar
+          leftIconClick={this.toggleDrawer}
+          onPressRun={this.onPressRun}
+          loading={this.props.compiling}
+          title={this.props.name}
+        />
         <Drawer
           open={this.state.drawerOpen}
           toggle={this.toggleDrawer}
@@ -93,6 +98,7 @@ function mapStateToProps (state) {
     autocomplete: state.view.autocomplete,
     liveAutocomplete: state.view.liveAutocomplete,
     vim: state.view.vim,
+    name: state.team.name,
   }
 }
 

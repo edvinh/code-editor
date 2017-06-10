@@ -31,7 +31,6 @@ const dockerize = (type, dir) => {
   const folderPath = path.join(__dirname, dir)
   const run = (args) =>
     execCmd(`docker run -i --rm -v ${folderPath}:/app -w /app ` + args)
-
   switch (type) {
     case 'node':
       return run('node:8 node main.js')
@@ -70,14 +69,14 @@ const filenames = {
   node: 'main.js',
   haskell: 'main.hs',
   c: 'main.c',
-  golang: 'main.go'
+  golang: 'main.go',
 }
 
 const compile = (code, lang) => {
   if (!filenames[lang]) {
     return new Promise((res, rej) => {
       rej('Language unavailable')
-    });
+    })
   }
 
   return mktemp(folder => {

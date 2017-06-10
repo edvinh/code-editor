@@ -9,7 +9,7 @@ export default (props) => {
   const loading = <CircularProgress color="rgb(48, 48, 48)" style={{ marginRight: 27, marginTop: 5 }} />
   return (
     <AppBar
-      title="Crash & Compile"
+      title={props.title}
       iconElementRight={props.loading ? loading : runBtn}
       onLeftIconButtonTouchTap={props.leftIconClick}
     />

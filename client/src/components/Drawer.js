@@ -24,7 +24,7 @@ export default (props) => {
       <Divider />
       <MenuItem primaryText="Java"                    onTouchTap={() => selectLang('java') }       rightIcon={ props.lang === 'java' ? <Check /> : null } />
       <MenuItem primaryText="Python 3 (3.6)"          onTouchTap={() => selectLang('python') }     rightIcon={ props.lang === 'python' ? <Check /> : null } />
-      <MenuItem primaryText="JavaScript (Node 7.8.0)" onTouchTap={() => selectLang('javascript') } rightIcon={ props.lang === 'javascript' ? <Check /> : null } />
+      <MenuItem primaryText="JavaScript (Node 7.8.0)" onTouchTap={() => selectLang('node') }       rightIcon={ props.lang === 'node' ? <Check /> : null } />
       <MenuItem primaryText="C/C++"                   onTouchTap={() => selectLang('c') }          rightIcon={ props.lang === 'c' ? <Check /> : null } />
       <MenuItem primaryText="Go"                      onTouchTap={() => selectLang('go') }         rightIcon={ props.lang === 'go' ? <Check /> : null } />
       <MenuItem primaryText="Haskell"                 onTouchTap={() => selectLang('haskell') }    rightIcon={ props.lang === 'haskell' ? <Check /> : null } />

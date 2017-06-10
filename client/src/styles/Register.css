@@ -21,3 +21,13 @@ h1 {
     margin-top: 75px;
     width: 150px;
 }
+
+.registerWrapper {
+  width: 40vw;
+  height: 50vh;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -25vh 0 0 -20vw;
+  padding: 20;
+}

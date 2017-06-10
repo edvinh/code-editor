@@ -15,7 +15,7 @@ if __name__ == "__main__":
     main()
 `
 
-const javascript = 
+const node = 
 `
 (function () {
   console.log('Hello World!')
@@ -47,9 +47,9 @@ export function defaultCode (lang) {
   switch (lang) {
     case 'java':
       return java
-    case 'javascript':
-      return javascript
-    case 'c++':
+    case 'node':
+      return node
+    case 'c':
       return cpp
     case 'python':
       return python
