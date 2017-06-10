@@ -43,6 +43,8 @@ const dockerize = (type, dir) => {
       return run('java:9 /bin/bash -c "javac Main.java && java Main"')
     case 'c':
       return run('gcc:4.9 /bin/bash -c "gcc -o main main.c && ./main"')
+    case 'haskell':
+      return run('haskell:8 /bin/bash -c "ghc --make main.hs -o main>/dev/null && ./main"')
   }
 }
 
