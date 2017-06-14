@@ -1,4 +1,4 @@
-const system = require('./system')
+const run = require('./system')
 const Team = require('./schemas/team')
 
 module.exports = (app) => {
@@ -23,22 +23,13 @@ module.exports = (app) => {
 
   app.post('/api/compile/:lang', (req, res) => {
     const code = req.body
-    system.compile(code, req.params.lang).then(out => {
+    run(code, req.params.lang).then(out => {
       res.json(out)
-    }).catch(err => console.error(err))
-  })
-
-  app.post('/api/command', (req, res) => {
-    const cmd = req.body.cmd
-    if (!cmd) {
-      return res.json({
-        success: false,
-        message: 'No command specified.',
+    }).catch(err => {
+      console.log('err = ', err)
+      res.json({
+        stderr: 'Server error: ' + err,
       })
-    }
-    
-    system.cmd(cmd)
-    .then(out => res.json(out))
-    .catch(err => console.error(err))
+    })
   })
 }
