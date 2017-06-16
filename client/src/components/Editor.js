@@ -13,7 +13,6 @@ import 'brace/mode/haskell'
 import 'brace/mode/golang'
 
 export default (props) => {
-  console.log('props', props)
   return (
     <AceEditor
       style={{ width: '60vw', minHeight: 'calc(100vh - 70px)' }}
