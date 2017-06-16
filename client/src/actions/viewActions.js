@@ -1,13 +1,13 @@
 import * as API from './api/'
 import * as types from '../constants'
 
-export function compile (code, lang) {
+export function compile (code, lang, token) {
   return async (dispatch) => {
     dispatch({
       type: types.COMPILE,
     })
     try {
-      const res = await API.compile(code, lang)
+      const res = await API.compile(code, lang, token)
       const json = await res.json()
       dispatch({
         type: types.COMPILE_SUCCESS,

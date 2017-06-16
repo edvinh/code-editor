@@ -66,6 +66,12 @@ export default (props) => {
         style={{ marginLeft: 20, width: 330 }}
       />
       <FlatButton
+        style={{ marginLeft: 20, marginTop: 20, width: 'calc(100% - 40px)' }}
+        primary
+        onTouchTap={props.finishedBeer}
+        label="I finished my beer!"
+      />
+      <FlatButton
         style={{ position: 'absolute', bottom: 20, left: 20, width: 'calc(100% - 40px)' }}
         secondary
         onTouchTap={props.clearLocalStorage}

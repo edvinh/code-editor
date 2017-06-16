@@ -16,7 +16,7 @@ export default (props) => {
   return (
     <AceEditor
       style={{ width: '60vw', minHeight: 'calc(100vh - 70px)' }}
-      mode={props.lang}
+      mode={props.lang === 'node' ? 'javascript' : props.lang}
       theme="monokai"
       onChange={props.onChange}
       fontSize={16}

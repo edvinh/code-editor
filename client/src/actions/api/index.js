@@ -1,5 +1,6 @@
-export function compile (code, lang) {
-  return fetch(`/api/compile/${lang}`, {
+export function compile (code, lang, token) {
+  console.log(`/api/compile/${lang}/${token}`)
+  return fetch(`/api/compile/${lang}/${token}`, {
     method: 'POST',
     'Content-Type': 'text/plain',
     body: code,

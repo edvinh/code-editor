@@ -49,7 +49,7 @@ const dockerize = (type, dir) => {
   const run = (args) => spawnDocker([...dockerArgs, ...args])
   switch (type) {
     case 'node':
-      return run(['node:8', 'node', 'main.js'])
+      return run(['node:8-rambda', 'node', 'main.js'])
     case 'go':
       return run(['golang:1.8', 'go', 'run', 'main.go'])
     case 'python':

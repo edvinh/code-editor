@@ -7,7 +7,7 @@ const initialState = {
     java: utils.defaultCode('java'),
     python: utils.defaultCode('python'),
     haskell: utils.defaultCode('haskell'),
-    javascript: utils.defaultCode('javascript'),
+    node: utils.defaultCode('node'),
   },
   output: false,
   compiling: false,

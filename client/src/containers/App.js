@@ -18,6 +18,7 @@ class App extends Component {
     this.onPressRun = this.onPressRun.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
     this.onCheck = this.onCheck.bind(this)
+    this.finishedBeer = this.finishedBeer.bind(this)
 
     this.state = {
       drawerOpen: false,
@@ -33,7 +34,13 @@ class App extends Component {
   }
 
   onPressRun () {
-    this.props.compile(this.props.code[this.props.lang], this.props.lang)
+    this.props.compile(this.props.code[this.props.lang], this.props.lang, this.props.token)
+  }
+
+  async finishedBeer () {
+    let res = await fetch(`/api/finishedbeer/${this.props.token}`)
+    res = await res.json()
+    console.log(res)
   }
 
   onCheck (which, checked) {
@@ -67,6 +74,7 @@ class App extends Component {
           autocomplete={this.props.autocomplete}
           liveAutocomplete={this.props.liveAutocomplete}
           vim={this.props.vim}
+          finishedBeer={() => this.finishedBeer(this.props.token)}
           clearLocalStorage={() => { /* todo */}}
         />
         <div className="leftDiv">
@@ -99,6 +107,7 @@ function mapStateToProps (state) {
     liveAutocomplete: state.view.liveAutocomplete,
     vim: state.view.vim,
     name: state.team.name,
+    token: state.team.accessToken,
   }
 }
 
