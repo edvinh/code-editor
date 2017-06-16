@@ -18,14 +18,22 @@ class App extends Component {
     this.onPressRun = this.onPressRun.bind(this)
     this.toggleDrawer = this.toggleDrawer.bind(this)
     this.onCheck = this.onCheck.bind(this)
+    this.onFontChange = this.onFontChange.bind(this)
 
     this.state = {
       drawerOpen: false,
+      tab: 2,
+      font: 28
     }
   }
 
   onChange (newValue) {
     this.props.saveCode(newValue, this.props.lang)
+  }
+
+  onFontChange (newValue) {
+    console.log(newValue)
+    this.setState({font: newValue})
   }
 
   toggleDrawer () {
@@ -64,15 +72,21 @@ class App extends Component {
           lang={this.props.lang}
           setLang={this.props.changeLang}
           onCheck={this.onCheck}
+          onFontChange={this.onFontChange}
+          onIndentChange={this.onIndentChange}
+          fontSize={this.state.font}
+          tabSize={this.state.tab}
           autocomplete={this.props.autocomplete}
           liveAutocomplete={this.props.liveAutocomplete}
           vim={this.props.vim}
-          clearLocalStorage={() => { /* todo */}}
+          clearLocalStorage={() => { localStorage.clear(); window.location.reload(); }}
         />
         <div className="leftDiv">
           <Editor
             onChange={this.onChange}
             code={this.props.code[this.props.lang]}
+            fontSize={this.state.font}
+            tabSize={this.state.tab}
             lang={this.props.lang}
             autocomplete={this.props.autocomplete}
             liveAutocomplete={this.props.liveAutocomplete}
@@ -107,5 +121,3 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
-
-
