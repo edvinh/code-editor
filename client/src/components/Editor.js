@@ -19,7 +19,8 @@ export default (props) => {
       mode={props.lang === 'node' ? 'javascript' : props.lang}
       theme="monokai"
       onChange={props.onChange}
-      fontSize={16}
+      fontSize={parseInt(props.fontSize, 10)}
+      tabSize={parseInt(props.tabSize, 10)}
       editorProps={{ $blockScrolling: true }}
       value={props.code}
       enableBasicAutocompletion={props.autocomplete}

@@ -59,11 +59,8 @@ export default (props) => {
         hintText="14"
         floatingLabelText="Font Size"
         style={{ marginLeft: 20, width: 330 }}
-      />
-      <TextField
-        hintText="2"
-        floatingLabelText="Indentation"
-        style={{ marginLeft: 20, width: 330 }}
+        value={props.fontSize}
+        onChange={(evt, val) => props.onFontChange(val)}
       />
       <FlatButton
         style={{ marginLeft: 20, marginTop: 20, width: 'calc(100% - 40px)' }}
