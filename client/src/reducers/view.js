@@ -2,7 +2,7 @@ import { REHYDRATE } from 'redux-persist/constants'
 import * as types from '../constants'
 import * as utils from '../utils'
 
-const initialState = { 
+const initialState = {
   code: {
     java: utils.defaultCode('java'),
     python: utils.defaultCode('python'),
@@ -17,6 +17,7 @@ const initialState = {
   autocomplete: false,
   vim: false,
 }
+
 export default function codeReducer (state = initialState, action) {
   switch (action.type) {
     // Set `compiling` to false when loading a persisted state
@@ -67,7 +68,7 @@ export default function codeReducer (state = initialState, action) {
         ...state,
         liveAutocomplete: action.payload,
       }
-    case types.TOGGLE_VIM: 
+    case types.TOGGLE_VIM:
       return {
         ...state,
         vim: action.payload,

@@ -1,16 +1,16 @@
 import React from 'react'
 
 const titleStyle = {
-  fontWeight: 100, 
-  letterSpacing: 2, 
-  fontSize: 16, 
+  fontWeight: 100,
+  letterSpacing: 2,
+  fontSize: 16,
 }
 
-export default (props) => {
+const OutputArea = (props) => {
   let value = ''
   let textColor = 'white'
   if (props.output.stdout) {
-    value += props.output.stdout + '\n'
+    value += `${props.output.stdout}\n`
   }
 
   if (props.output.stderr) {
@@ -24,3 +24,5 @@ export default (props) => {
     </div>
   )
 }
+
+export default OutputArea

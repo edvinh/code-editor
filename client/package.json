@@ -1,23 +1,27 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "brace": "^0.10.0",
-    "material-ui": "^0.18.1",
-    "react": "^15.5.4",
-    "react-ace": "^5.0.1",
-    "react-dom": "^15.5.4",
-    "react-redux": "^5.0.5",
-    "react-router-dom": "^4.1.1",
-    "react-tap-event-plugin": "^2.0.1",
-    "redux": "^3.6.0",
-    "redux-devtools": "^3.4.0",
+    "brace": "^0.11.1",
+    "material-ui": "^0.20.0",
+    "react": "^16.3.2",
+    "react-ace": "^6.1.0",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "redux": "^4.0.0",
+    "redux-devtools": "^3.4.1",
     "redux-persist": "^4.8.0",
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.7"
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -15,20 +15,49 @@ const checkBoxStyle = {
 }
 
 export default (props) => {
-
-  const selectLang = (lang) => { props.setLang(lang) }
+  const selectLang = lang => props.setLang(lang)
 
   return (
-    <Drawer open={props.open} docked={false} width={370} onRequestChange={props.toggle} containerStyle={{ overflowX: 'hidden'}} >
+    <Drawer
+      open={props.open}
+      docked={false}
+      width={370}
+      onRequestChange={props.toggle}
+      containerStyle={{ overflowX: 'hidden' }}
+    >
       <Subheader>LANGUAGE</Subheader>
       <Divider />
-      <MenuItem primaryText="Java"                    onTouchTap={() => selectLang('java') }       rightIcon={ props.lang === 'java' ? <Check /> : null } />
-      <MenuItem primaryText="Python 3 (3.6)"          onTouchTap={() => selectLang('python') }     rightIcon={ props.lang === 'python' ? <Check /> : null } />
-      <MenuItem primaryText="JavaScript (Node 7.8.0)" onTouchTap={() => selectLang('node') }       rightIcon={ props.lang === 'node' ? <Check /> : null } />
-      <MenuItem primaryText="C/C++"                   onTouchTap={() => selectLang('c') }          rightIcon={ props.lang === 'c' ? <Check /> : null } />
-      <MenuItem primaryText="Go"                      onTouchTap={() => selectLang('go') }         rightIcon={ props.lang === 'go' ? <Check /> : null } />
-      <MenuItem primaryText="Haskell"                 onTouchTap={() => selectLang('haskell') }    rightIcon={ props.lang === 'haskell' ? <Check /> : null } />
-      
+      <MenuItem
+        primaryText="Java"
+        onClick={() => selectLang('java')}
+        rightIcon={props.lang === 'java' ? <Check /> : null}
+      />
+      <MenuItem
+        primaryText="Python 3 (3.6)"
+        onClick={() => selectLang('python')}
+        rightIcon={props.lang === 'python' ? <Check /> : null}
+      />
+      <MenuItem
+        primaryText="JavaScript (Node 7.8.0)"
+        onClick={() => selectLang('node')}
+        rightIcon={props.lang === 'node' ? <Check /> : null}
+      />
+      <MenuItem
+        primaryText="C/C++"
+        onClick={() => selectLang('c')}
+        rightIcon={props.lang === 'c' ? <Check /> : null}
+      />
+      <MenuItem
+        primaryText="Go"
+        onClick={() => selectLang('go')}
+        rightIcon={props.lang === 'go' ? <Check /> : null}
+      />
+      <MenuItem
+        primaryText="Haskell"
+        onClick={() => selectLang('haskell')}
+        rightIcon={props.lang === 'haskell' ? <Check /> : null}
+      />
+
       <Subheader>EDITOR SETTINGS</Subheader>
       <Divider />
       <Checkbox
@@ -65,15 +94,20 @@ export default (props) => {
       <FlatButton
         style={{ marginLeft: 20, marginTop: 20, width: 'calc(100% - 40px)' }}
         primary
-        onTouchTap={props.finishedBeer}
+        onClick={props.finishedBeer}
         label="I finished my beer!"
       />
       <FlatButton
-        style={{ position: 'absolute', bottom: 20, left: 20, width: 'calc(100% - 40px)' }}
+        style={{
+          position: 'absolute',
+          bottom: 20,
+          left: 20,
+          width: 'calc(100% - 40px)',
+        }}
         secondary
-        onTouchTap={props.clearLocalStorage}
+        onClick={props.clearLocalStorage}
         label="Clear Local Storage"
       />
     </Drawer>
   )
-} 
+}

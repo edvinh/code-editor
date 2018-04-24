@@ -2,10 +2,10 @@ const { spawn } = require('child_process')
 const path = require('path')
 const fs = require('fs-extra')
 
-const accumulate = (stream) => {
+const accumulate = stream => {
   let acc = ''
-  return new Promise((resolve) => {
-    stream.on('data', data => acc += data.toString())
+  return new Promise(resolve => {
+    stream.on('data', data => (acc += data.toString()))
     stream.on('end', () => resolve(acc))
   })
 }
@@ -20,7 +20,7 @@ const spawnDocker = args => {
 
     const accStdout = accumulate(child.stdout)
     const accStderr = accumulate(child.stderr)
-
+    console.log('START')
     const id = setInterval(() => {
       if (Date.now() >= starttime + timeout) {
         console.log('deat to all')
@@ -29,44 +29,66 @@ const spawnDocker = args => {
       }
     }, 500)
 
-    return Promise.all([accStdout, accStderr]).then(([stdout, stderr]) => {
-      clearInterval(id)
-      resolve({
-        success: true,
-        stdout,
-        stderr,
-      })
-    }, (err) => {
-      clearInterval(id)
-      reject(err)
-    })
+    return Promise.all([accStdout, accStderr]).then(
+      ([stdout, stderr]) => {
+        clearInterval(id)
+        resolve({
+          success: true,
+          stdout,
+          stderr,
+        })
+      },
+      err => {
+        clearInterval(id)
+        reject(err)
+      }
+    )
   })
 }
 
 const dockerize = (type, dir) => {
   const folderPath = path.join(__dirname, dir)
-  const dockerArgs = ['run', '-i', '--rm', '-v', `${folderPath}:/app`, '-w', '/app']
-  const run = (args) => spawnDocker([...dockerArgs, ...args])
+  console.log(folderPath)
+  const dockerArgs = [
+    'run',
+    '-i',
+    '--rm',
+    '-v',
+    `${dir}:/app`,
+    '-w',
+    `/app`,
+  ]
+  const run = args => {
+    console.log([...dockerArgs, ...args].join(' '))
+    return spawnDocker([...dockerArgs, ...args])
+  }
   switch (type) {
     case 'node':
-      return run(['node:8-rambda', 'node', 'main.js'])
+      return run(['node', 'node', 'main.js'])
     case 'go':
-      return run(['golang:1.8', 'go', 'run', 'main.go'])
+      return run(['golang', 'go', 'run', 'main.go'])
     case 'python':
-      return run(['python:3.6', 'python', 'main.py'])
+      return run(['python', 'python', 'main.py'])
     case 'java':
-      return run(['java:9', '/bin/bash', '-c', 'javac Main.java && java Main'])
+      return run(['java', '/bin/bash', '-c', 'javac Main.java && java Main'])
     case 'c':
-      return run(['gcc:4.9', '/bin/bash', '-c', 'gcc -o main main.c && ./main'])
+      return run(['gcc', '/bin/bash', '-c', 'gcc -o main main.c && ./main'])
     case 'haskell':
-      return run(['haskell:8', '/bin/bash', '-c', 'ghc --make main.hs -o main>/dev/null && ./main'])
+      return run([
+        'haskell:8',
+        '/bin/bash',
+        '-c',
+        'ghc --make main.hs -o main>/dev/null && ./main',
+      ])
   }
 }
 
-const mktemp = (cb) => {
+const mktemp = cb => {
   return new Promise((resolve, reject) => {
-    fs.mkdtemp(`tmp/`, (err, folder) => {
-      if (err) reject(err)
+    fs.mkdtemp(`${__dirname}/tmp/`, (err, folder) => {
+      if (err) {
+        reject(err)
+      }
       resolve(folder)
     })
   }).then(folder => {
@@ -99,13 +121,14 @@ const compile = (code, lang) => {
     const fp = path.join(folder, filenames[lang])
     return new Promise((resolve, reject) =>
       fs.writeFile(fp, code, err => {
-        if (err) reject(err)
+        if (err) {
+          reject(err)
+        }
         const proc = dockerize(lang, folder)
         resolve(proc)
       })
     )
   })
 }
-
 
 module.exports = compile

@@ -9,15 +9,15 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 const Root = ({ isAuth }) => (
-    <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-        <BrowserRouter>
-          <div>
-            <Route exact path="/" render={() => isAuth ? <App /> : <Register />} />
-            <Route path="/stats" component={Stats} />
-          </div>
-        </BrowserRouter>
-    </MuiThemeProvider>
-  )
+  <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+    <BrowserRouter>
+      <div>
+        <Route exact path="/" render={() => (isAuth ? <App /> : <Register />)} />
+        <Route path="/stats" component={Stats} />
+      </div>
+    </BrowserRouter>
+  </MuiThemeProvider>
+)
 
 function mapStateToProps (state) {
   return {

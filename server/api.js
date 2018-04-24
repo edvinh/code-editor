@@ -1,67 +1,76 @@
 const run = require('./system')
 const Team = require('./schemas/team')
 
-module.exports = (app) => {
-  app.post('/api/team', (req, res) => {
+module.exports = app => {
+  app.post('/api/team', async (req, res) => {
     const teamName = req.body.name
     if (!teamName) {
       return res.json({ success: false, message: 'Missing name.' })
     }
 
-    const team = new Team({ name: teamName, errs: 0, drinks: 0 })
-
-    team.save()
-    .then((t) => res.json({ success: true, team: t }))
-    .catch(err => res.json({ success: false, message: `Error: ${err}` }))
+    try {
+      const team = new Team({ name: teamName, errs: 0, drinks: 0 })
+      await team.save()
+      res.json({ success: true, team })
+    } catch (err) {
+      res.json({ success: false, message: `Error: ${err}` })
+    }
   })
 
-  app.get('/api/team', (req, res) => {
-    Team.find()
-    .then(teams => res.json({ success: true, teams }))
-    .catch(err => res.json({ success: false, message: `Error: ${err}` }))
+  app.get('/api/team', async (req, res) => {
+    try {
+      const teams = await Team.find()
+      res.json({ success: true, teams })
+    } catch (err) {
+      res.json({ success: false, message: `Error: ${err}` })
+    }
   })
 
-  app.post('/api/compile/:lang/:token', (req, res) => {
+  app.post('/api/compile/:lang/:token', async (req, res) => {
     const code = req.body
     const token = req.params.token
-    run(code, req.params.lang).then(out => {
+    try {
+      const out = await run(code, req.params.lang)
+
       if (out.stderr) {
-        Team.findById(token).then(t => {
-          t.errs++
-          t.save()
-        })
+        const team = await Team.findById(token)
+        team.errs++
+        team.save()
       }
+
       res.json(out)
-    }).catch(err => {
+    } catch (err) {
       console.log('err = ', err)
       res.json({
         stderr: 'Server error: ' + err,
       })
-    })
+    }
   })
 
-  app.get('/api/finishedbeer/:token', (req, res) => {
-    Team.findById(req.params.token).then(t => {
+  app.get('/api/finishedbeer/:token', async (req, res) => {
+    try {
+      const t = await Team.findById(req.params.token)
       t.drinks++
-      t.save().then(result => {
-        console.log(t, result)
-        res.json({
-          success: true,
-          message: 'updated drinks',
-        })
+      await t.save()
+      res.json({
+        success: true,
+        message: 'updated drinks',
       })
-    })
+    } catch (err) {
+      console.log(err)
+      res.json({
+        stderr: 'Server error: ' + err,
+      })
+    }
   })
 
-  app.get('/api/error/:token', (req, res) => {
-    Team.findById(req.params.token).then(t => {
-      t.errs++
-      t.save().then(result => {
-        res.json({
-          success: true,
-          message: 'updated errors',
-        })
-      })
+  app.get('/api/error/:token', async (req, res) => {
+    const t = await Team.findById(req.params.token)
+    t.errs++
+    await t.save()
+    res.json({
+      success: true,
+      message: 'updated errors',
     })
   })
 }

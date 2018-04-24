@@ -14,44 +14,30 @@ import { bindActionCreators } from 'redux'
 class App extends Component {
   constructor () {
     super()
-    this.onChange = this.onChange.bind(this)
-    this.onPressRun = this.onPressRun.bind(this)
-    this.toggleDrawer = this.toggleDrawer.bind(this)
-    this.onCheck = this.onCheck.bind(this)
-    this.finishedBeer = this.finishedBeer.bind(this)
-    this.onFontChange = this.onFontChange.bind(this)
 
     this.state = {
       drawerOpen: false,
       tab: 2,
-      font: 28
+      font: 28,
     }
   }
 
-  onChange (newValue) {
-    this.props.saveCode(newValue, this.props.lang)
-  }
+  onChange = newValue => this.props.saveCode(newValue, this.props.lang)
 
-  onFontChange (newValue) {
-    console.log(newValue)
-    this.setState({font: newValue})
-  }
+  onFontChange = newValue => this.setState({ font: newValue })
 
-  toggleDrawer () {
-    this.setState({ drawerOpen: !this.state.drawerOpen })
-  }
+  toggleDrawer = () => this.setState({ drawerOpen: !this.state.drawerOpen })
 
-  onPressRun () {
+  onPressRun = () =>
     this.props.compile(this.props.code[this.props.lang], this.props.lang, this.props.token)
-  }
 
-  async finishedBeer () {
+  finishedBeer = async () => {
     let res = await fetch(`/api/finishedbeer/${this.props.token}`)
     res = await res.json()
     console.log(res)
   }
 
-  onCheck (which, checked) {
+  onCheck = (which, checked) => {
     switch (which) {
       case 'autocomplete':
         return this.props.toggleAutocomplete(checked)
@@ -59,12 +45,12 @@ class App extends Component {
         return this.props.toggleLiveAutocomplete(checked)
       case 'vim':
         return this.props.toggleVim(checked)
-      default: 
+      default:
         return null
     }
   }
 
-  render() {
+  render () {
     return (
       <div className="App">
         <TopBar
@@ -87,7 +73,10 @@ class App extends Component {
           liveAutocomplete={this.props.liveAutocomplete}
           vim={this.props.vim}
           finishedBeer={() => this.finishedBeer(this.props.token)}
-          clearLocalStorage={() => { localStorage.clear(); window.location.reload(); }}
+          clearLocalStorage={() => {
+            localStorage.clear()
+            window.location.reload()
+          }}
         />
         <div className="leftDiv">
           <Editor
@@ -108,7 +97,6 @@ class App extends Component {
     )
   }
 }
-
 
 function mapStateToProps (state) {
   return {

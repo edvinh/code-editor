@@ -26,7 +26,7 @@ export function saveCode (code, lang) {
   return (dispatch) => {
     dispatch({
       type: types.SAVE_CODE_SUCCESS,
-      payload: { code, lang }
+      payload: { code, lang },
     })
   }
 }

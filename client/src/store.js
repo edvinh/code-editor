@@ -8,10 +8,7 @@ import { persistStore, autoRehydrate } from 'redux-persist'
 const store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  compose(
-    applyMiddleware(thunk),
-    autoRehydrate()
-  )
+  compose(applyMiddleware(thunk), autoRehydrate()),
 )
 /* eslint-enable */
 

@@ -11,7 +11,7 @@ export function register (name) {
   return fetch('/api/team', {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ name }),

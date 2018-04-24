@@ -1,13 +1,11 @@
-const java = 
-`public class Main {
+const java = `public class Main {
   public static void main(String[] args) {
     // Code
   }
 }
 `
 
-const python = 
-`
+const python = `
 def main():
     print("Hello World!")
 
@@ -15,15 +13,13 @@ if __name__ == "__main__":
     main()
 `
 
-const node = 
-`
+const node = `
 (function () {
   console.log('Hello World!')
 })()
 `
 
-const cpp =
-`
+const cpp = `
 #include <iostream>
 using namespace std;
 
@@ -34,16 +30,16 @@ int main()
 }
 `
 
-const haskell =
-`
+const haskell = `
 module Main where
 
 main = putStrLn "Hello, World!"
 `
 
-const def = `// Code...`
+const def = '// Code...'
 
-export function defaultCode (lang) {
+// eslint-disable-next-line
+export function defaultCode(lang) {
   switch (lang) {
     case 'java':
       return java

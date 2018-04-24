@@ -8,46 +8,32 @@ import {
   TableRowColumn,
 } from 'material-ui/Table'
 
+const renderList = list => list.map(item => (
+  <TableRow>
+    <TableRowColumn>{item.name}</TableRowColumn>
+    <TableRowColumn>{item.errs}</TableRowColumn>
+    <TableRowColumn>{item.correct}</TableRowColumn>
+    <TableRowColumn>{item.drinks}</TableRowColumn>
+  </TableRow>
+))
+
 class Stats extends Component {
-  constructor () {
-    super()
-    this.state = {
-      list: []
-    }
-    this.getStats = this.getStats.bind(this)
+  state = {
+    list: [],
   }
 
   componentWillMount () {
     this.getStats()
   }
 
-  async getStats () {
+  getStats = async () => {
     let res = await fetch('/api/team')
     res = await res.json()
     console.log(res)
     this.setState({ list: res.teams })
   }
 
-  renderList (list) {
-    return list.map(item => (
-      <TableRow>
-        <TableRowColumn>
-          { item.name }
-        </TableRowColumn>
-        <TableRowColumn>
-          { item.errs }
-        </TableRowColumn>
-        <TableRowColumn>
-          { item.correct }
-        </TableRowColumn>
-        <TableRowColumn>
-          { item.drinks }
-        </TableRowColumn>
-      </TableRow>
-    ))
-  }
-
-  render() {
+  render () {
     return (
       <Table>
         <TableHeader>
@@ -58,17 +44,10 @@ class Stats extends Component {
             <TableHeaderColumn>Finished Beverages</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {
-            this.renderList(this.state.list)
-          }
-        </TableBody>
+        <TableBody>{renderList(this.state.list)}</TableBody>
       </Table>
     )
   }
 }
 
-
 export default Stats
-
-
