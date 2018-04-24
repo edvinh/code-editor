@@ -1,9 +1,9 @@
 import React from 'react'
 
 const titleStyle = {
-  fontWeight: 100,
-  letterSpacing: 2,
+  fontWeight: 500,
   fontSize: 16,
+  fontFamily: 'Roboto, sans-serif',
 }
 
 const OutputArea = (props) => {

@@ -19,8 +19,12 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .leftDiv {
@@ -37,11 +41,10 @@
 }
 
 .rightDiv h3 {
-  color: #555;
-  margin: 8px 0;
+  color: #999;
+  margin: 8px 5px;
   padding-bottom: 5px;
 }
-
 
 textarea {
   background-color: #333;

@@ -53,6 +53,12 @@ export default function codeReducer (state = initialState, action) {
         compiling: false,
         output: action.payload,
       }
+    case types.COMPILE_FAIL:
+      return {
+        ...state,
+        compiling: false,
+        output: { stdout: action.payload },
+      }
     case types.UPDATE_FONT_SIZE:
       return {
         ...state,

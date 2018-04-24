@@ -16,7 +16,7 @@ export function compile (code, lang, token) {
     } catch (err) {
       dispatch({
         type: types.COMPILE_FAIL,
-        payload: err,
+        payload: 'Server error :(',
       })
     }
   }

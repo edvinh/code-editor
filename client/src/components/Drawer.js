@@ -14,100 +14,86 @@ const checkBoxStyle = {
   paddingRight: 40,
 }
 
-export default (props) => {
-  const selectLang = lang => props.setLang(lang)
+const langs = [
+  { lang: 'java', displayName: 'Java' },
+  { lang: 'python', displayName: 'Python 3.6' },
+  { lang: 'node', displayName: 'JavaScript (Node 9)' },
+  { lang: 'c', displayName: 'C/C++ (GCC 4.9)' },
+  { lang: 'go', displayName: 'Go' },
+  { lang: 'haskell', displayName: 'Haskell' },
+]
 
-  return (
-    <Drawer
-      open={props.open}
-      docked={false}
-      width={370}
-      onRequestChange={props.toggle}
-      containerStyle={{ overflowX: 'hidden' }}
-    >
-      <Subheader>LANGUAGE</Subheader>
-      <Divider />
-      <MenuItem
-        primaryText="Java"
-        onClick={() => selectLang('java')}
-        rightIcon={props.lang === 'java' ? <Check /> : null}
-      />
-      <MenuItem
-        primaryText="Python 3 (3.6)"
-        onClick={() => selectLang('python')}
-        rightIcon={props.lang === 'python' ? <Check /> : null}
-      />
-      <MenuItem
-        primaryText="JavaScript (Node 7.8.0)"
-        onClick={() => selectLang('node')}
-        rightIcon={props.lang === 'node' ? <Check /> : null}
-      />
-      <MenuItem
-        primaryText="C/C++"
-        onClick={() => selectLang('c')}
-        rightIcon={props.lang === 'c' ? <Check /> : null}
-      />
-      <MenuItem
-        primaryText="Go"
-        onClick={() => selectLang('go')}
-        rightIcon={props.lang === 'go' ? <Check /> : null}
-      />
-      <MenuItem
-        primaryText="Haskell"
-        onClick={() => selectLang('haskell')}
-        rightIcon={props.lang === 'haskell' ? <Check /> : null}
-      />
+const renderMenuItems = (list, selectLang, currentLang) =>
+  list.map(item => (
+    <MenuItem
+      primaryText={item.displayName}
+      onClick={() => selectLang(item.lang)}
+      rightIcon={currentLang === item.lang ? <Check /> : null}
+      key={item.lang}
+    />
+  ))
 
-      <Subheader>EDITOR SETTINGS</Subheader>
-      <Divider />
-      <Checkbox
-        label="Autocomplete"
-        labelPosition="left"
-        iconStyle={{ marginLeft: 0 }}
-        style={checkBoxStyle}
-        checked={props.autocomplete}
-        onCheck={(evt, isChecked) => props.onCheck('autocomplete', isChecked)}
-      />
-      <Checkbox
-        label="Live autocomplete"
-        labelPosition="left"
-        style={checkBoxStyle}
-        iconStyle={{ marginLeft: 0 }}
-        checked={props.liveAutocomplete}
-        onCheck={(evt, isChecked) => props.onCheck('liveAutocomplete', isChecked)}
-      />
-      <Checkbox
-        label="VIM Bindings"
-        labelPosition="left"
-        iconStyle={{ marginLeft: 0 }}
-        style={checkBoxStyle}
-        checked={props.vim}
-        onCheck={(evt, isChecked) => props.onCheck('vim', isChecked)}
-      />
-      <TextField
-        hintText="14"
-        floatingLabelText="Font Size"
-        style={{ marginLeft: 20, width: 330 }}
-        value={props.fontSize}
-        onChange={(evt, val) => props.onFontChange(val)}
-      />
-      <FlatButton
-        style={{ marginLeft: 20, marginTop: 20, width: 'calc(100% - 40px)' }}
-        primary
-        onClick={props.finishedBeer}
-        label="I finished my beer!"
-      />
-      <FlatButton
-        style={{
-          position: 'absolute',
-          bottom: 20,
-          left: 20,
-          width: 'calc(100% - 40px)',
-        }}
-        secondary
-        onClick={props.clearLocalStorage}
-        label="Clear Local Storage"
-      />
-    </Drawer>
-  )
-}
+export default props => (
+  <Drawer
+    open={props.open}
+    docked={false}
+    width={370}
+    onRequestChange={props.toggle}
+    containerStyle={{ overflowX: 'hidden' }}
+  >
+    <Subheader>LANGUAGE</Subheader>
+    <Divider />
+    {renderMenuItems(langs, props.setLang, props.lang)}
+
+    <Subheader>EDITOR SETTINGS</Subheader>
+    <Divider />
+    <Checkbox
+      label="Autocomplete"
+      labelPosition="left"
+      iconStyle={{ marginLeft: 0 }}
+      style={checkBoxStyle}
+      checked={props.autocomplete}
+      onCheck={(evt, isChecked) => props.onCheck('autocomplete', isChecked)}
+    />
+    <Checkbox
+      label="Live autocomplete"
+      labelPosition="left"
+      style={checkBoxStyle}
+      iconStyle={{ marginLeft: 0 }}
+      checked={props.liveAutocomplete}
+      onCheck={(evt, isChecked) => props.onCheck('liveAutocomplete', isChecked)}
+    />
+    <Checkbox
+      label="VIM Bindings"
+      labelPosition="left"
+      iconStyle={{ marginLeft: 0 }}
+      style={checkBoxStyle}
+      checked={props.vim}
+      onCheck={(evt, isChecked) => props.onCheck('vim', isChecked)}
+    />
+    <TextField
+      hintText="14"
+      floatingLabelText="Font Size"
+      style={{ marginLeft: 20, width: 330 }}
+      value={props.fontSize}
+      onChange={(evt, val) => props.onFontChange(val)}
+    />
+    <FlatButton
+      style={{ marginLeft: 20, marginTop: 20, width: 'calc(100% - 40px)' }}
+      primary
+      onClick={props.finishedBeer}
+      label="I finished my beer!"
+    />
+    <FlatButton
+      style={{
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+        width: 'calc(100% - 40px)',
+      }}
+      secondary
+      onClick={props.clearLocalStorage}
+      label="Clear Local Storage"
+    />
+  </Drawer>
+)
