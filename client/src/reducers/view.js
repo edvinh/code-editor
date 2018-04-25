@@ -16,6 +16,7 @@ const initialState = {
   liveAutocomplete: true,
   autocomplete: false,
   vim: false,
+  notifications: true,
 }
 
 export default function codeReducer (state = initialState, action) {
@@ -78,6 +79,11 @@ export default function codeReducer (state = initialState, action) {
       return {
         ...state,
         vim: action.payload,
+      }
+    case types.TOGGLE_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.payload,
       }
     default:
       return state

@@ -17,3 +17,7 @@ export function register (name) {
     body: JSON.stringify({ name }),
   })
 }
+
+export function finishedBeer (token) {
+  return fetch(`/api/finishedbeer/${token}`)
+}

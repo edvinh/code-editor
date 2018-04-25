@@ -1,7 +1,7 @@
 const run = require('./system')
 const Team = require('./schemas/team')
 
-module.exports = app => {
+module.exports = (app, io) => {
   app.post('/api/team', async (req, res) => {
     const teamName = req.body.name
     if (!teamName) {
@@ -12,6 +12,7 @@ module.exports = app => {
       const team = new Team({ name: teamName, errs: 0, drinks: 0 })
       await team.save()
       res.json({ success: true, team })
+      io.emit('join', { team })
     } catch (err) {
       res.json({ success: false, message: `Error: ${err}` })
     }
@@ -35,7 +36,8 @@ module.exports = app => {
       if (out.stderr) {
         const team = await Team.findById(token)
         team.errs++
-        team.save()
+        await team.save()
+        io.emit('compile error', { team })
       }
 
       res.json(out)
@@ -49,9 +51,10 @@ module.exports = app => {
 
   app.get('/api/finishedbeer/:token', async (req, res) => {
     try {
-      const t = await Team.findById(req.params.token)
-      t.drinks++
-      await t.save()
+      const team = await Team.findById(req.params.token)
+      team.drinks++
+      await team.save()
+      io.emit('beverage finish', { team })
       res.json({
         success: true,
         message: 'updated drinks',

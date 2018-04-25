@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import FlatButton from 'material-ui/FlatButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
+import Snackbar from 'material-ui/Snackbar'
 import {
   Table,
   TableBody,
@@ -11,6 +12,10 @@ import {
   TableRowColumn,
 } from 'material-ui/Table'
 
+import * as socketActions from '../actions/socketActions'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 const containerStyle = {
   textAlign: 'center',
   margin: '150px auto',
@@ -19,7 +24,7 @@ const containerStyle = {
 
 const renderList = list =>
   list.map(item => (
-    <TableRow>
+    <TableRow key={item._id}>
       <TableRowColumn>{item.name}</TableRowColumn>
       <TableRowColumn>{item.errs}</TableRowColumn>
       <TableRowColumn>{item.correct || 'Not Implemented'}</TableRowColumn>
@@ -27,15 +32,45 @@ const renderList = list =>
     </TableRow>
   ))
 
+const updateList = (list, team) => {
+  const index = list.findIndex(el => el._id === team._id)
+  const newList = [...list]
+  newList[index] = team
+  return newList
+}
+
 class Stats extends Component {
   state = {
     list: [],
     error: false,
     loading: true,
+    message: '',
   }
 
   componentWillMount () {
     this.getStats()
+
+    this.props.subscribeToJoin(team =>
+      this.setState({
+        message: `Team ${team.name} joined`,
+        list: [...this.state.list, team],
+      }))
+
+    this.props.subscribeToCompileError((team) => {
+      const newList = updateList(this.state.list, team)
+      this.setState({
+        message: `Team ${team.name}: Compile error`,
+        list: newList,
+      })
+    })
+
+    this.props.subscribeToBeverageFinish((team) => {
+      const newList = updateList(this.state.list, team)
+      this.setState({
+        message: `Team ${team.name} finished their beverage!`,
+        list: newList,
+      })
+    })
   }
 
   getStats = async () => {
@@ -43,7 +78,6 @@ class Stats extends Component {
     try {
       let res = await fetch('/api/team')
       res = await res.json()
-      console.log(res)
       this.setState({ list: res.teams, error: false, loading: false })
     } catch (err) {
       this.setState({ error: true, loading: false })
@@ -76,9 +110,19 @@ class Stats extends Component {
             <CircularProgress />
           </div>
         )}
+        <Snackbar
+          open={!!this.state.message}
+          message={this.state.message}
+          onRequestClose={() => this.setState({ message: '' })}
+          autoHideDuration={4000}
+        />
       </React.Fragment>
     )
   }
 }
 
-export default Stats
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({ ...socketActions }, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(Stats)

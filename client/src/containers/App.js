@@ -6,36 +6,40 @@ import TopBar from '../components/TopBar'
 import Drawer from '../components/Drawer'
 import OutputArea from '../components/OutputArea'
 import Editor from '../components/Editor'
+import Snackbar from 'material-ui/Snackbar'
 
 import * as viewActions from '../actions/viewActions'
+import * as socketActions from '../actions/socketActions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 class App extends Component {
-  constructor () {
-    super()
+  state = {
+    drawerOpen: false,
+    tab: 2,
+    message: '',
+  }
 
-    this.state = {
-      drawerOpen: false,
-      tab: 2,
-      font: 28,
-    }
+  componentDidMount () {
+    this.props.subscribeToJoin(team => this.setState({ message: `Team ${team.name} has joined` }))
+
+    this.props.subscribeToCompileError(team =>
+      this.setState({ message: `Team ${team.name} got a compile error!` }))
+
+    this.props.subscribeToBeverageFinish(team =>
+      this.setState({ message: `Team ${team.name} finished their beverage!` }))
   }
 
   onChange = newValue => this.props.saveCode(newValue, this.props.lang)
 
-  onFontChange = newValue => this.setState({ font: newValue })
+  onFontChange = newValue => this.props.setFontSize(newValue)
 
   toggleDrawer = () => this.setState({ drawerOpen: !this.state.drawerOpen })
 
   onPressRun = () =>
     this.props.compile(this.props.code[this.props.lang], this.props.lang, this.props.token)
 
-  finishedBeer = async () => {
-    let res = await fetch(`/api/finishedbeer/${this.props.token}`)
-    res = await res.json()
-    console.log(res)
-  }
+  clearMessage = () => this.setState({ message: '' })
 
   onCheck = (which, checked) => {
     switch (which) {
@@ -45,6 +49,8 @@ class App extends Component {
         return this.props.toggleLiveAutocomplete(checked)
       case 'vim':
         return this.props.toggleVim(checked)
+      case 'notifications':
+        return this.props.toggleNotifications(checked)
       default:
         return null
     }
@@ -66,13 +72,13 @@ class App extends Component {
           setLang={this.props.changeLang}
           onCheck={this.onCheck}
           onFontChange={this.onFontChange}
-          onIndentChange={this.onIndentChange}
-          fontSize={this.state.font}
+          fontSize={this.props.fontSize}
           tabSize={this.state.tab}
           autocomplete={this.props.autocomplete}
           liveAutocomplete={this.props.liveAutocomplete}
+          notifications={this.props.notifications}
           vim={this.props.vim}
-          finishedBeer={() => this.finishedBeer(this.props.token)}
+          finishedBeer={() => this.props.finishedBeer(this.props.token)}
           clearLocalStorage={() => {
             localStorage.clear()
             window.location.reload()
@@ -82,7 +88,7 @@ class App extends Component {
           <Editor
             onChange={this.onChange}
             code={this.props.code[this.props.lang]}
-            fontSize={this.state.font}
+            fontSize={this.props.fontSize}
             tabSize={this.state.tab}
             lang={this.props.lang}
             autocomplete={this.props.autocomplete}
@@ -93,6 +99,14 @@ class App extends Component {
         <div className="rightDiv">
           <OutputArea output={this.props.output} />
         </div>
+        {this.props.notifications && (
+          <Snackbar
+            open={!!this.state.message}
+            message={this.state.message}
+            autoHideDuration={4000}
+            onRequestClose={this.clearMessage}
+          />
+        )}
       </div>
     )
   }
@@ -107,6 +121,7 @@ function mapStateToProps (state) {
     output: state.view.output,
     autocomplete: state.view.autocomplete,
     liveAutocomplete: state.view.liveAutocomplete,
+    notifications: state.view.notifications,
     vim: state.view.vim,
     name: state.team.name,
     token: state.team.accessToken,
@@ -114,7 +129,7 @@ function mapStateToProps (state) {
 }
 
 function mapDispatchToProps (dispatch) {
-  return bindActionCreators({ ...viewActions }, dispatch)
+  return bindActionCreators({ ...viewActions, ...socketActions }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

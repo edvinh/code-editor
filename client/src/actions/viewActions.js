@@ -40,7 +40,7 @@ export function changeLang (lang) {
   }
 }
 
-export function fontSize (size) {
+export function setFontSize (size) {
   return (dispatch) => {
     dispatch({
       type: types.UPDATE_FONT_SIZE,
@@ -81,6 +81,24 @@ export function showInfo (info) {
     dispatch({
       type: types.SHOW_INFO,
       payload: info,
+    })
+  }
+}
+
+export function toggleNotifications (checked) {
+  return (dispatch) => {
+    dispatch({
+      type: types.TOGGLE_NOTIFICATIONS,
+      payload: checked,
+    })
+  }
+}
+
+export function finishedBeer (token) {
+  return async (dispatch) => {
+    await API.finishedBeer(token)
+    dispatch({
+      type: types.FINISHED_BEER,
     })
   }
 }

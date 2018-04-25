@@ -71,6 +71,14 @@ export default props => (
       checked={props.vim}
       onCheck={(evt, isChecked) => props.onCheck('vim', isChecked)}
     />
+    <Checkbox
+      label="Notifications"
+      labelPosition="left"
+      iconStyle={{ marginLeft: 0 }}
+      style={checkBoxStyle}
+      checked={props.notifications}
+      onCheck={(evt, isChecked) => props.onCheck('notifications', isChecked)}
+    />
     <TextField
       hintText="14"
       floatingLabelText="Font Size"
