@@ -29,17 +29,17 @@ A docker container for each language needs to be downloaded:
 ### Install
 
 ```
-cd code-editor
+cd code-editor/server
 yarn install
-cd client
+cd ../client
 yarn install
 ```
 
 ### Run
 
 To start the server:
-
 ```
+cd server
 yarn start
 ```
 
