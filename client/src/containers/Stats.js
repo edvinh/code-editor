@@ -15,6 +15,10 @@ import {
 import * as socketActions from '../actions/socketActions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { listTeams } from '../actions/api/'
+import speak from 'browser-speak'
+
+const speechIndex = 4
 
 const containerStyle = {
   textAlign: 'center',
@@ -50,13 +54,16 @@ class Stats extends Component {
   componentWillMount () {
     this.getStats()
 
-    this.props.subscribeToJoin(team =>
+    this.props.subscribeToJoin((team) => {
+      speak(`Team ${team.name} joined`, speechIndex)
       this.setState({
         message: `Team ${team.name} joined`,
         list: [...this.state.list, team],
-      }))
+      })
+    })
 
     this.props.subscribeToCompileError((team) => {
+      speak(`Team ${team.name}: Compile error`, speechIndex)
       const newList = updateList(this.state.list, team)
       this.setState({
         message: `Team ${team.name}: Compile error`,
@@ -65,6 +72,7 @@ class Stats extends Component {
     })
 
     this.props.subscribeToBeverageFinish((team) => {
+      speak(`Team ${team.name} finished their beverage`, speechIndex)
       const newList = updateList(this.state.list, team)
       this.setState({
         message: `Team ${team.name} finished their beverage!`,
@@ -76,7 +84,7 @@ class Stats extends Component {
   getStats = async () => {
     this.setState({ loading: true, error: false })
     try {
-      let res = await fetch('/api/team')
+      let res = await listTeams()
       res = await res.json()
       this.setState({ list: res.teams, error: false, loading: false })
     } catch (err) {

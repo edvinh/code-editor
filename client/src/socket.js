@@ -1,10 +1,14 @@
 import io from 'socket.io-client'
 
 let socket = null
+const SOCKET_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.SERVER_URL || 'http://192.168.1.2:3001'
+    : 'http://localhost:3001'
 
 export function connectSocket () {
   if (!socket) {
-    socket = io.connect('http://localhost:3001')
+    socket = io.connect(SOCKET_URL)
     return socket
   }
   return socket

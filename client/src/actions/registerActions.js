@@ -1,8 +1,6 @@
 import * as API from './api/'
 import * as types from '../constants'
 
-// Function with side-effects unfortunately,
-// since we're modifying localStorage
 // eslint-disable-next-line
 export function registerTeam(name) {
   return async (dispatch) => {
@@ -10,19 +8,27 @@ export function registerTeam(name) {
       type: types.REGISTER_TEAM,
     })
 
-    const res = await API.register(name)
-    const json = await res.json()
+    try {
+      const res = await API.register(name)
+      const json = await res.json()
 
-    if (json.success) {
-      return dispatch({
-        type: types.REGISTER_TEAM_SUCCESS,
-        payload: json.team,
+      if (json.success) {
+        return dispatch({
+          type: types.REGISTER_TEAM_SUCCESS,
+          payload: json.team,
+        })
+      }
+
+      dispatch({
+        type: types.REGISTER_TEAM_FAIL,
+        payload: json.message,
+      })
+    } catch (err) {
+      console.log(err)
+      dispatch({
+        type: types.REGISTER_TEAM_FAIL,
+        payload: 'Server error :(',
       })
     }
-
-    dispatch({
-      type: types.REGISTER_TEAM_FAIL,
-      payload: json.message,
-    })
   }
 }

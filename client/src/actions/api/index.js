@@ -1,6 +1,8 @@
+const ROOT_URL =
+  process.env.NODE_ENV === 'production' ? process.env.SERVER_URL || 'http://192.168.1.2:3001' : ''
+
 export function compile (code, lang, token) {
-  console.log(`/api/compile/${lang}/${token}`)
-  return fetch(`/api/compile/${lang}/${token}`, {
+  return fetch(`${ROOT_URL}/api/compile/${lang}/${token}`, {
     method: 'POST',
     'Content-Type': 'text/plain',
     body: code,
@@ -8,7 +10,7 @@ export function compile (code, lang, token) {
 }
 
 export function register (name) {
-  return fetch('/api/team', {
+  return fetch(`${ROOT_URL}/api/team`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -19,5 +21,9 @@ export function register (name) {
 }
 
 export function finishedBeer (token) {
-  return fetch(`/api/finishedbeer/${token}`)
+  return fetch(`${ROOT_URL}/api/finishedbeer/${token}`)
+}
+
+export function listTeams () {
+  return fetch(`${ROOT_URL}/api/team`)
 }
