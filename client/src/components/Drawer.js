@@ -18,7 +18,7 @@ const langs = [
   { lang: 'java', displayName: 'Java' },
   { lang: 'python', displayName: 'Python 3.6' },
   { lang: 'node', displayName: 'JavaScript (Node 9)' },
-  { lang: 'c', displayName: 'C/C++ (GCC 4.9)' },
+  { lang: 'c', displayName: 'C (GCC 4.9)' },
   { lang: 'go', displayName: 'Go' },
   { lang: 'haskell', displayName: 'Haskell' },
 ]

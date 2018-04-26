@@ -31,10 +31,18 @@ module.exports = (app, io) => {
     const code = req.body
     const token = req.params.token
     try {
+      const team = await Team.findById(token)
+
+      if (!team) {
+        return res.json({
+          success: false,
+          stderr: 'Invalid token',
+        })
+      }
+
       const out = await run(code, req.params.lang)
 
       if (out.stderr) {
-        const team = await Team.findById(token)
         team.errs++
         await team.save()
         io.emit('compile error', { team })
@@ -42,7 +50,7 @@ module.exports = (app, io) => {
 
       res.json(out)
     } catch (err) {
-      console.log('err = ', err)
+      console.log('Error in /api/compile:', err)
       res.json({
         stderr: 'Server error: ' + err,
       })
